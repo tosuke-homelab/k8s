@@ -1,0 +1,65 @@
+# eBPF native routing
+kubeProxyReplacement: strict
+tunnel: disabled
+ipv4NativeRoutingCIDR: "10.0.0.0/8"
+ipv6NativeRoutingCIDR: "240d:1a:d4e:c521::/64"
+ipv6:
+  enabled: true
+
+# Pod network connectivity
+bpf:
+  masquerade: true
+enableIPv6Masquerade: false
+
+# Kubernetes Host based IPAM
+ipam:
+  mode: kubernetes
+
+# API Server
+k8sServiceHost: "192.168.3.2"
+k8sServicePort: 6443
+
+# cilium-agent
+tolerations:
+- operator: Exists
+  key: "node-role.kubernetes.io/master"
+prometheus:
+  enabled: true
+
+# cilium-operator
+operator:
+  replicas: 1
+  tolerations:
+  - operator: Exists
+    key: "node-role.kubernetes.io/master"
+  prometheus:
+    enabled: true
+
+# hubble
+hubble:
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+  metrics:
+    enabled:
+    - dns:query
+    - drop
+    - tcp
+    - flow
+    - icmp
+    - http
+
+# ingress controller
+ingressController:
+  enabled: true
+  loadbalancerMode: shared
+  service:
+    annotations:
+      purelb.io/service-group: default
+
+extraConfig:
+  ipv6-service-range: "240d:1a:d4e:c521:7376:6300::/112"
+  enable-ipv6-ndp: "true"
+  ipv6-mcast-device: eth0
+
