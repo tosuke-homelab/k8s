@@ -50,16 +50,9 @@ hubble:
     - icmp
     - http
 
-# ingress controller
-ingressController:
-  enabled: true
-  loadbalancerMode: shared
-  service:
-    annotations:
-      purelb.io/service-group: default
-
 extraConfig:
   ipv6-service-range: "240d:1a:d4e:c521:7376:6300::/112"
   enable-ipv6-ndp: "true"
   ipv6-mcast-device: eth0
+  enable-envoy-config: "true"
 
