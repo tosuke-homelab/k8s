@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: contour
+
+resources:
+- namespace.yaml
+
+helmCharts:
+- name: contour
+  repo: https://charts.bitnami.com/bitnami
+  namespace: contour
+  releaseName: homelab
+  valuesFile: values.yaml

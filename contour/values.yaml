@@ -1,0 +1,21 @@
+contour:
+  image:
+    registry: ghcr.io
+    repository: projectcontour/contour
+    tag: v1.22.1
+
+envoy:
+  image:
+    registry: docker.io
+    repository: envoyproxy/envoy
+    tag: v1.23.1
+  service:
+    externalTrafficPolicy: Cluster
+    ipFamilyPolicy: PreferDualStack
+
+configInline:
+  tls:
+    minimum-protocol-version: "1.2"
+    cipher-suites:
+    - "[ECDHE-ECDSA-AES128-GCM-SHA256|ECDHE-ECDSA-CHACHA20-POLY1305]"
+    - "ECDHE-ECDSA-AES256-GCM-SHA384"
