@@ -1,30 +1,29 @@
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: hubble-ui
+  labels:
+    app.kubernetes.io/name: hubble-ui
+    app.kubernetes.io/part-of: cilium
+    k8s-app: hubble-ui
 spec:
-  virtualhost:
-    fqdn: hubble.k8s.tosuke.me
-    tls:
-      secretName: hubble-k8s-tosuke-me-cert
-      minimumProtocolVersion: "1.3"
-  # FIXME: Contour doesn't support gRPC-Web only endpoints 
-  # https://github.com/projectcontour/contour/issues/4290
-  tcpproxy:
+  routes:
+  - match: Host(`hubble.k8s.tosuke.me`)
+    kind: Rule
     services:
     - name: hubble-ui
       port: 80
-  routes:
-  - conditions:
-    - prefix: /
-    services: # provide dummy services for redirect to https
-    - name: hubble-ui
-      port: 80
+  tls:
+    secretName: hubble-k8s-tosuke-me-cert
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: hubble-ui
+  labels:
+    app.kubernetes.io/name: hubble-ui
+    app.kubernetes.io/part-of: cilium
+    k8s-app: hubble-ui
 spec:
   dnsNames:
   - hubble.k8s.tosuke.me
@@ -34,5 +33,6 @@ spec:
   privateKey:
     rotationPolicy: Always
     algorithm: ECDSA
-    size: 256
+    size: 384
   secretName: hubble-k8s-tosuke-me-cert
+

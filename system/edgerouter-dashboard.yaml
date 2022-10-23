@@ -25,25 +25,33 @@ subsets:
     protocol: TCP
     port: 443
 ---
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: traefik.containo.us/v1alpha1
+kind: ServersTransport
+metadata:
+  name: edgerouter-dashboard-transport
+  labels:
+    k8s-app: edgerouter-dashboard
+spec:
+  insecureSkipVerify: true
+  maxIdleConnsPerHost: 10
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: edgerouter-dashboard
   labels:
     k8s-app: edgerouter-dashboard
 spec:
-  virtualhost:
-    fqdn: erlite.tosuke.me
-    tls:
-      secretName: erlite-tosuke-me-cert
   routes:
-  - conditions:
-    - prefix: /
-    enableWebsockets: true
+  - match: Host(`erlite.tosuke.me`)
+    kind: Rule
     services:
     - name: edgerouter-dashboard
       port: 443
-      protocol: tls
+      scheme: https
+      serversTransport: edgerouter-dashboard-transport
+  tls:
+    secretName: erlite-tosuke-me-cert
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -60,5 +68,5 @@ spec:
   privateKey:
     rotationPolicy: Always
     algorithm: ECDSA
-    size: 256
+    size: 384
   secretName: erlite-tosuke-me-cert
