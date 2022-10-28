@@ -3,5 +3,14 @@ kind: Kustomization
 
 namespace: kube-system
 
+generatorOptions:
+  disableNameSuffixHash: true
+
 resources:
 - edgerouter-dashboard.yaml
+- cloudflare-origin-tls.yaml
+
+secretGenerator:
+- name: cloudflare-origin-pull-ca
+  files:
+  - ca.crt=cloudflare-origin-pull-ca.pem

@@ -42,6 +42,8 @@ metadata:
   labels:
     k8s-app: edgerouter-dashboard
 spec:
+  entryPoints:
+  - websecure
   routes:
   - match: Host(`erlite.tosuke.me`)
     kind: Rule
@@ -51,22 +53,6 @@ spec:
       scheme: https
       serversTransport: edgerouter-dashboard-transport
   tls:
-    secretName: erlite-tosuke-me-cert
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: edgerouter-dashboard
-  labels:
-    k8s-app: edgerouter-dashboard
-spec:
-  dnsNames:
-  - erlite.tosuke.me
-  issuerRef:
-    name: letsencrypt
-    kind: ClusterIssuer
-  privateKey:
-    rotationPolicy: Always
-    algorithm: ECDSA
-    size: 384
-  secretName: erlite-tosuke-me-cert
+    secretName: cloudflare-erlite-cert
+    options:
+      name: cloudflare-origin
