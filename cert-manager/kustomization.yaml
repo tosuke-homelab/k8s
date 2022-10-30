@@ -6,7 +6,7 @@ namespace: cert-manager
 resources:
 - namespace.yaml
 - clusterissuers.yaml
-- cloudflare-secret.yaml
+- cloudflare-dns-api-secret.yaml
 
 helmCharts:
 - name: cert-manager
