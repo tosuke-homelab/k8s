@@ -7,8 +7,9 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- edgerouter-dashboard.yaml
 - cloudflare-origin-tls.yaml
+- cloudflare-origin-issuer.yaml
+- edgerouter-dashboard.yaml
 
 secretGenerator:
 - name: cloudflare-origin-pull-ca

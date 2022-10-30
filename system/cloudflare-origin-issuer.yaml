@@ -1,0 +1,27 @@
+apiVersion: cert-manager.k8s.cloudflare.com/v1
+kind: OriginIssuer
+metadata:
+  name: cloudflare-origin-issuer
+spec:
+  requestType: OriginECC
+  auth:
+    serviceKeyRef:
+      name: cloudflare-origin-ca-key
+      key: origin-ca-key
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: cloudflare-origin-ca-key
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm
+  target:
+    name: cloudflare-origin-ca-key
+    creationPolicy: Owner
+  data:
+    - secretKey: origin-ca-key
+      remoteRef:
+        key: cloudflare-origin-ca-key
