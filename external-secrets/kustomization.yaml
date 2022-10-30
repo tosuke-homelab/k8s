@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: external-secrets
+
+resources:
+- namespace.yaml
+- gcpsm-cluster-secret-store.yaml
+
+helmCharts:
+- name: external-secrets
+  repo: https://charts.external-secrets.io
+  version: 0.6.1
+  releaseName: homelab
+  namespace: external-secrets
+  includeCRDs: true
+  valuesInline:
+    certController:
+      tolerations:
+      - operator: Exists
+        key: "node-role.kubernetes.io/master"
+    tolerations:
+    - operator: Exists
+      key: "node-role.kubernetes.io/master"
