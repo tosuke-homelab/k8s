@@ -15,7 +15,7 @@ deployment:
 
 service:
   annotations:
-    "purelb.io/allow-shared-ip": public-traefik
+    "purelb.io/allow-shared-ip": public
   ipFamilyPolicy: PreferDualStack
 
 ports:
