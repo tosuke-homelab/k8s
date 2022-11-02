@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: kube-apiserver
+spec:
+  entryPoints:
+  - kubernetes
+  routes:
+  - match: HostSNI(`k8s.tosuke.me`)
+    services:
+    - name: kubernetes
+      port: 443
+  tls:
+    passthrough: true
+    
