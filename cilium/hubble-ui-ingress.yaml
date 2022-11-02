@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/part-of: cilium
     k8s-app: hubble-ui
 spec:
+  entryPoints: ["websecure"]
   routes:
   - match: Host(`hubble.k8s.tosuke.me`)
     kind: Rule

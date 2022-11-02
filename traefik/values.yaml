@@ -19,10 +19,40 @@ service:
   ipFamilyPolicy: PreferDualStack
 
 ports:
+  traefik:
+    port: 9000
+    expose: false
+    exposedPort: 9000
+    protocol: TCP
   web:
+    port: 8080
+    expose: true
+    exposedPort: 80
+    protocol: TCP
     redirectTo: websecure
   websecure:
+    port: 8443
+    expose: true
+    exposedPort: 443
+    protocol: TCP
+    tls:
+      enabled: true
+      options: ""
+      certResolver: ""
+      domains: []
     http3: true
+  kubernetes:
+    port: 6443
+    expose: true
+    exposedPort: 6443
+    protocol: TCP
+    tls:
+      enabled: true
+  metrics:
+    port: 9100
+    expose: false
+    exposedPort: 9100
+    protocol: TCP
 
 tlsOptions:
   default:
@@ -40,3 +70,9 @@ tlsOptions:
 logs:
   access:
     enabled: true
+
+providers:
+  kubernetesIngress:
+    enabled: true
+    publishedService:
+      enabled: true
