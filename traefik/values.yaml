@@ -15,7 +15,9 @@ deployment:
 
 service:
   annotations:
-    "purelb.io/allow-shared-ip": public
+    purelb.io/allow-shared-ip: public
+    external-dns.alpha.kubernetes.io/hostname: traefik.dns.tosuke.me
+    external-dns.alpha.kubernetes.io/ttl: "180"
   ipFamilyPolicy: PreferDualStack
 
 ports:
