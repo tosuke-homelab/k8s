@@ -1,0 +1,11 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: TLSOption
+metadata:
+  name: cloudflare-origin
+spec:
+  minVersion: VersionTLS13
+  sniStrict: true
+  clientAuth:
+    clientAuthType: RequireAndVerifyClientCert
+    secretNames:
+    - cloudflare-origin-pull-ca

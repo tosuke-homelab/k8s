@@ -1,0 +1,47 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dex
+spec:
+  entryPoints: [websecure]
+  routes:
+  - match: Host(`id.tosuke.me`)
+    kind: Rule
+    services:
+    - name: dex
+      port: 80
+  tls:
+    secretName: dex-tls-cert
+    options:
+      name: cloudflare-origin
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: dex
+spec:
+  endpoints:
+  - dnsName: id.tosuke.me
+    recordType: CNAME
+    targets: [traefik.dns.tosuke.me]
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "true"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dex
+spec:
+  secretName: dex-tls-cert
+  dnsNames:
+  - id.tosuke.me
+  duration: 168h
+  renewBefore: 24h
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+  issuerRef:
+    group: cert-manager.k8s.cloudflare.com
+    kind: OriginIssuer
+    name: cloudflare-origin-issuer

@@ -1,0 +1,21 @@
+issuer: https://id.tosuke.me
+storage:
+  type: kubernetes
+  config:
+    inCluster: true
+web:
+  http: 0.0.0.0:8080
+
+connectors:
+- type: github
+  id: github
+  name: GitHub
+  config:
+    clientID: $GITHUB_CLIENT_ID
+    clientSecret: $GITHUB_CLIENT_SECRET
+    redirectURI: https://id.tosuke.me/callback
+
+    orgs:
+    - name: linkage-community
+
+staticClients: []

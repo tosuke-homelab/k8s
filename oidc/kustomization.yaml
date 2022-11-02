@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: oidc
+
+resources:
+- namespace.yaml
+- cloudflare-origin-issuer.yaml
+- cloudflare-origin-tls.yaml
+- dex
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+- name: cloudflare-origin-pull-ca
+  files:
+  - ca.crt=cloudflare-origin-pull-ca.pem
