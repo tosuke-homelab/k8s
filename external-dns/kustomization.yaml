@@ -12,3 +12,7 @@ resources:
 - rbac.yaml
 - secret.yaml
 - deployment.yaml
+
+images:
+- name: k8s.gcr.io/external-dns/external-dns
+  newTag: v0.13.1
