@@ -11,6 +11,11 @@ spec:
   routes:
   - match: Host(`hubble.k8s.tosuke.me`)
     kind: Rule
+    middlewares:
+    - name: hubble-ui-oauth-errors
+      namespace: oidc
+    - name: hubble-ui-oauth-auth
+      namespace: oidc
     services:
     - name: hubble-ui
       port: 80

@@ -1,0 +1,138 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hubble-ui-oauth2-proxy
+spec:
+  entryPoints: [websecure]
+  routes:
+  - match: Host(`hubble.k8s.tosuke.me`) && PathPrefix(`/oauth2/`)
+    kind: Rule
+    services:
+    - name: hubble-ui-oauth2-proxy
+      port: 80
+  tls:
+    store:
+      name: default
+      namespace: traefik
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: hubble-ui-oauth-auth
+spec:
+  forwardAuth:
+    address: http://hubble-ui-oauth2-proxy.oidc/oauth2/auth
+    trustForwardHeader: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: hubble-ui-oauth-errors
+spec:
+  errors:
+    status:
+    - "401-403"
+    service:
+      kind: Service
+      name: hubble-ui-oauth2-proxy
+      port: 80
+    query: "/oauth2/sign_in"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hubble-ui-oauth2-proxy
+spec:
+  selector:
+    app: hubble-ui-oauth2-proxy
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hubble-ui-oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hubble-ui-oauth2-proxy
+  template:
+    metadata:
+      labels:
+        app: hubble-ui-oauth2-proxy
+    spec:
+      containers:
+      - name: oauth2-proxy
+        image: quay.io/oauth2-proxy/oauth2-proxy
+        imagePullPolicy: IfNotPresent
+        args:
+        - --http-address=0.0.0.0:4180
+        - --provider=oidc
+        - --provider-display-name=dex
+        - --oidc-issuer-url=https://id.tosuke.me
+        - --redirect-url=https://hubble.k8s.tosuke.me/oauth2/callback
+        - --email-domain=*
+        - --allowed-group=linkage-community:developers
+        env:
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth2-proxy-cookie-secret-hubble-ui
+              key: cookie-secret
+        - name: OAUTH2_PROXY_CLIENT_ID
+          value: hubble-ui
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: dex-client-secret-hubble-ui
+              key: client-secret
+        ports:
+        - containerPort: 4180
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 0
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 0
+          timeoutSeconds: 1
+          successThreshold: 1
+          periodSeconds: 10
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: oauth2-proxy-cookie-secret-hubble-ui
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcpsm
+  target:
+    name: oauth2-proxy-cookie-secret-hubble-ui
+    creationPolicy: Owner
+  data:
+  - secretKey: cookie-secret
+    remoteRef:
+      key: oauth2-cookie-secret-hubble-ui
+
+        

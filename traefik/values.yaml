@@ -71,9 +71,15 @@ tlsOptions:
 
 logs:
   access:
-    enabled: true
+    enabled: false
 
 providers:
+  kubernetesCRD:
+    enabled: true
+    allowCrossNamespace: true
+    allowExternalNameServices: false
+    allowEmptyServices: false
+    namespaces: []
   kubernetesIngress:
     enabled: true
     publishedService:

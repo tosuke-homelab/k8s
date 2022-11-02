@@ -10,6 +10,7 @@ resources:
 - cloudflare-origin-tls.yaml
 - cloudflare-origin-issuer.yaml
 - edgerouter-dashboard.yaml
+- hubble-ui
 
 secretGenerator:
 - name: cloudflare-origin-pull-ca

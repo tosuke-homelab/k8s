@@ -12,7 +12,7 @@ resources:
 
 images:
 - name: ghcr.io/dexidp/dex
-  newTag: v2.30.0
+  newTag: v2.35.3-distroless
 
 configMapGenerator:
 - name: dex-config

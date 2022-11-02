@@ -7,7 +7,9 @@ resources:
 - namespace.yaml
 - cloudflare-origin-issuer.yaml
 - cloudflare-origin-tls.yaml
+- dex-secrets.yaml
 - dex
+- oauth2-proxy
 
 generatorOptions:
   disableNameSuffixHash: true
