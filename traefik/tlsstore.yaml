@@ -1,0 +1,40 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: TLSStore
+metadata:
+  name: default
+spec:
+  certificates:
+  - secretName: wildcard-tosuke-me-cert
+  - secretName: wildcard-k8s-tosuke-me-cert
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-k8s-tosuke-me
+spec:
+  secretName: wildcard-k8s-tosuke-me-cert
+  commonName: "*.k8s.tosuke.me"
+  dnsNames:
+  - "*.k8s.tosuke.me"
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-tosuke-me
+spec:
+  secretName: wildcard-tosuke-me-cert
+  commonName: "*.tosuke.me"
+  dnsNames:
+  - "*.tosuke.me"
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt

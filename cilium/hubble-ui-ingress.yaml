@@ -15,7 +15,9 @@ spec:
     - name: hubble-ui
       port: 80
   tls:
-    secretName: hubble-k8s-tosuke-me-cert
+    store:
+      name: default
+      namespace: traefik
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
@@ -26,24 +28,3 @@ spec:
   - dnsName: hubble.k8s.tosuke.me
     recordType: CNAME
     targets: [traefik.dns.tosuke.me]
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: hubble-ui
-  labels:
-    app.kubernetes.io/name: hubble-ui
-    app.kubernetes.io/part-of: cilium
-    k8s-app: hubble-ui
-spec:
-  dnsNames:
-  - hubble.k8s.tosuke.me
-  issuerRef:
-    name: letsencrypt
-    kind: ClusterIssuer
-  privateKey:
-    rotationPolicy: Always
-    algorithm: ECDSA
-    size: 384
-  secretName: hubble-k8s-tosuke-me-cert
-
