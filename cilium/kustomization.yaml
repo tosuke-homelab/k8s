@@ -3,12 +3,9 @@ kind: Kustomization
 
 namespace: kube-system
 
-resources:
-- hubble-ui-ingress.yaml
-
 helmCharts:
 - name: cilium
   repo: https://helm.cilium.io
-  version: "1.13.0-rc1"
+  version: "1.12.3"
   namespace: kube-system
   valuesFile: values.yaml
