@@ -42,8 +42,12 @@ operator:
 hubble:
   relay:
     enabled: true
+    podAnnotations:
+      io.cilium.proxy-visibility: "<Ingress/4245/TCP/HTTP>"
   ui:
     enabled: true
+    podAnnotations:
+      io.cilium.proxy-visibility: "<Ingress/8081/TCP/HTTP>"
   metrics:
     enabled:
     - dns:query

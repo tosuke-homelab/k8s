@@ -25,6 +25,8 @@ spec:
     metadata:
       labels:
         app: dex
+      annotations:
+        io.cilium.proxy-visibility: "<Ingress/8080/TCP/HTTP>"
     spec:
       serviceAccountName: dex
       containers:

@@ -64,6 +64,8 @@ spec:
     metadata:
       labels:
         app: hubble-ui-oauth2-proxy
+      annotations:
+        io.cilium.proxy-visibility: "<Ingress/4180/TCP/HTTP>"
     spec:
       containers:
       - name: oauth2-proxy
