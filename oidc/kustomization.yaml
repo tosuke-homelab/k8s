@@ -5,16 +5,6 @@ namespace: oidc
 
 resources:
 - namespace.yaml
-- cloudflare-origin-issuer.yaml
-- cloudflare-origin-tls.yaml
 - dex-secrets.yaml
 - dex
 - oauth2-proxy
-
-generatorOptions:
-  disableNameSuffixHash: true
-
-secretGenerator:
-- name: cloudflare-origin-pull-ca
-  files:
-  - ca.crt=cloudflare-origin-pull-ca.pem

@@ -10,6 +10,7 @@ resources:
 - cloudflare-origin-tls.yaml
 - certificates.yaml
 - edgerouter-dashboard-gateway.yaml
+- dex-gateway.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

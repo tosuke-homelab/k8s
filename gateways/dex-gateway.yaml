@@ -8,10 +8,11 @@ spec:
   - match: Host(`id.tosuke.me`)
     kind: Rule
     services:
-    - name: dex
-      port: 80
+    - kind: TraefikService
+      namespace: oidc
+      name: dex
   tls:
-    secretName: dex-tls-cert
+    secretName: cloudflare-origin-cert-wildcard-tosuke-me
     options:
       name: cloudflare-origin
 ---
@@ -27,21 +28,3 @@ spec:
     providerSpecific:
     - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
       value: "true"
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: dex
-spec:
-  secretName: dex-tls-cert
-  dnsNames:
-  - id.tosuke.me
-  duration: 168h
-  renewBefore: 24h
-  privateKey:
-    algorithm: ECDSA
-    size: 384
-  issuerRef:
-    group: cert-manager.k8s.cloudflare.com
-    kind: OriginIssuer
-    name: cloudflare-origin-issuer
