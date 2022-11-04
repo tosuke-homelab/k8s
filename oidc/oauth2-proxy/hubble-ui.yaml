@@ -1,19 +1,12 @@
 apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+kind: Middleware
 metadata:
-  name: hubble-ui-oauth2-proxy
+  name: hubble-ui-oauth
 spec:
-  entryPoints: [websecure]
-  routes:
-  - match: Host(`hubble.k8s.tosuke.me`) && PathPrefix(`/oauth2/`)
-    kind: Rule
-    services:
-    - name: hubble-ui-oauth2-proxy
-      port: 80
-  tls:
-    store:
-      name: default
-      namespace: traefik
+  chain:
+    middlewares:
+    - name: hubble-ui-oauth-errors
+    - name: hubble-ui-oauth-auth
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -37,6 +30,17 @@ spec:
       name: hubble-ui-oauth2-proxy
       port: 80
     query: "/oauth2/sign_in"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: TraefikService
+metadata:
+  name: hubble-ui-oauth2-proxy
+spec:
+  weighted:
+    services:
+    - kind: Service
+      name: hubble-ui-oauth2-proxy
+      port: 80
 ---
 apiVersion: v1
 kind: Service

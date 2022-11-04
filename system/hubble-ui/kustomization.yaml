@@ -6,4 +6,4 @@ commonLabels:
   app.kubernetes.io/part-of: cilium
 
 resources:
-- ingress.yaml
+- traefik-service.yaml

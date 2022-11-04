@@ -11,6 +11,7 @@ resources:
 - certificates.yaml
 - edgerouter-dashboard-gateway.yaml
 - dex-gateway.yaml
+- hubble-ui-gateway.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

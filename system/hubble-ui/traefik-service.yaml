@@ -1,0 +1,10 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: TraefikService
+metadata:
+  name: hubble-ui
+spec:
+  weighted:
+    services:
+    - kind: Service
+      name: hubble-ui
+      port: 80

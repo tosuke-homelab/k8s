@@ -2,27 +2,26 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: hubble-ui
-  labels:
-    app.kubernetes.io/name: hubble-ui
-    app.kubernetes.io/part-of: cilium
-    k8s-app: hubble-ui
 spec:
-  entryPoints: ["websecure"]
+  entryPoints: [websecure]
   routes:
   - match: Host(`hubble.k8s.tosuke.me`)
     kind: Rule
     middlewares:
-    - name: hubble-ui-oauth-errors
-      namespace: oidc
-    - name: hubble-ui-oauth-auth
+    - name: hubble-ui-oauth
       namespace: oidc
     services:
-    - name: hubble-ui
-      port: 80
+    - kind: TraefikService
+      namespace: kube-system
+      name: hubble-ui
+  - match: Host(`hubble.k8s.tosuke.me`) && PathPrefix(`/oauth2/`)
+    kind: Rule
+    services:
+    - kind: TraefikService
+      namespace: oidc
+      name: hubble-ui-oauth2-proxy
   tls:
-    store:
-      name: default
-      namespace: traefik
+    secretName: cert-wildcard-k8s-tosuke-me
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
