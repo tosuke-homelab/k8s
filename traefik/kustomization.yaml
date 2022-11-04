@@ -5,7 +5,6 @@ namespace: traefik
 
 resources:
 - namespace.yaml
-- tlsstore.yaml
 
 helmCharts:
 - name: traefik
