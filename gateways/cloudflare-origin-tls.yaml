@@ -5,6 +5,9 @@ metadata:
 spec:
   minVersion: VersionTLS13
   sniStrict: true
+  curvePreferences:
+  - CurveP384
+  - CurveP521
   clientAuth:
     clientAuthType: RequireAndVerifyClientCert
     secretNames:

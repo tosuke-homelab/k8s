@@ -26,26 +26,17 @@ subsets:
     port: 443
 ---
 apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+kind: TraefikService
 metadata:
   name: edgerouter-dashboard
-  labels:
-    k8s-app: edgerouter-dashboard
 spec:
-  entryPoints:
-  - websecure
-  routes:
-  - match: Host(`erlite.tosuke.me`)
-    kind: Rule
+  weighted:
     services:
-    - name: edgerouter-dashboard
+    - kind: Service
+      name: edgerouter-dashboard
       port: 443
       scheme: https
       serversTransport: edgerouter-dashboard-transport
-  tls:
-    secretName: erlite-tosuke-me-cert
-    options:
-      name: cloudflare-origin
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: ServersTransport
@@ -56,36 +47,3 @@ metadata:
 spec:
   insecureSkipVerify: true
   maxIdleConnsPerHost: 10
----
-apiVersion: externaldns.k8s.io/v1alpha1
-kind: DNSEndpoint
-metadata:
-  name: edgerouter-dashboard
-spec:
-  endpoints:
-  - dnsName: erlite.tosuke.me
-    recordType: CNAME
-    targets: [traefik.dns.tosuke.me]
-    providerSpecific:
-    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-      value: "true"
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: edgerouter-dashboard
-  labels:
-    k8s-app: edgerouter-dashboard
-spec:
-  secretName: erlite-tosuke-me-cert
-  dnsNames:
-  - erlite.tosuke.me
-  duration: 168h
-  renewBefore: 24h
-  issuerRef:
-    group: cert-manager.k8s.cloudflare.com
-    kind: OriginIssuer
-    name: cloudflare-origin-issuer
-  privateKey:
-    algorithm: ECDSA
-    size: 384

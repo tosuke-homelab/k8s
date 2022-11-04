@@ -1,7 +1,7 @@
 apiVersion: cert-manager.k8s.cloudflare.com/v1
 kind: OriginIssuer
 metadata:
-  name: cloudflare-origin-issuer
+  name: cloudflare-origin
 spec:
   requestType: OriginECC
   auth:

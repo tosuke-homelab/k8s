@@ -1,0 +1,33 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-k8s-tosuke-me
+spec:
+  secretName: cert-wildcard-k8s-tosuke-me
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt
+  commonName: "*.k8s.tosuke.me"
+  dnsNames:
+  - "*.k8s.tosuke.me"
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cloudflare-origin-wildcard-tosuke-me
+spec:
+  secretName: cloudflare-origin-cert-wildcard-tosuke-me
+  issuerRef:
+    group: cert-manager.k8s.cloudflare.com
+    kind: OriginIssuer
+    name: cloudflare-origin
+  commonName: "*.tosuke.me"
+  dnsNames:
+  - "tosuke.me"
+  - "*.tosuke.me"
+  privateKey:
+    algorithm: ECDSA
+    size: 384

@@ -3,16 +3,6 @@ kind: Kustomization
 
 namespace: kube-system
 
-generatorOptions:
-  disableNameSuffixHash: true
-
 resources:
-- cloudflare-origin-tls.yaml
-- cloudflare-origin-issuer.yaml
 - edgerouter-dashboard.yaml
 - hubble-ui
-
-secretGenerator:
-- name: cloudflare-origin-pull-ca
-  files:
-  - ca.crt=cloudflare-origin-pull-ca.pem

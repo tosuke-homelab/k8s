@@ -1,0 +1,30 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: edgerouter-dashboard
+spec:
+  entryPoints: [websecure]
+  routes:
+  - match: Host(`erlite.tosuke.me`)
+    kind: Rule
+    services:
+    - kind: TraefikService
+      namespace: kube-system
+      name: edgerouter-dashboard
+  tls:
+    secretName: cloudflare-origin-cert-wildcard-tosuke-me
+    options:
+      name: cloudflare-origin
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: edgerouter-dashboard
+spec:
+  endpoints:
+  - dnsName: erlite.tosuke.me
+    recordType: CNAME
+    targets: [traefik.dns.tosuke.me]
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "true"
