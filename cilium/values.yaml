@@ -5,8 +5,11 @@ ipv6NativeRoutingCIDR: "240d:1a:d4e:c521::/64"
 ipv6:
   enabled: true
 kubeProxyReplacement: strict
+autoDirectNodeRoutes: true
+devices:
+- eth0
 
-# Pod network connectivity
+# egress Pod traffic
 bpf:
   masquerade: true
 enableIPv6Masquerade: false
