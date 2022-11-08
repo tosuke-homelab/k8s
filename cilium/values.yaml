@@ -33,7 +33,6 @@ image:
   tag: "v1.12.3"
 tolerations:
 - operator: Exists
-  key: "node-role.kubernetes.io/master"
 prometheus:
   enabled: true
 
