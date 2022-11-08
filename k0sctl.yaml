@@ -1,0 +1,51 @@
+apiVersion: k0sctl.k0sproject.io/v1beta1
+kind: Cluster
+metadata:
+  name: homelab-cluster
+spec:
+  hosts:
+  - role: controller+worker
+    privateAddress: 192.168.20.2
+    ssh:
+      address: hayama.tail1e178.ts.net
+      user: ubuntu
+      port: 22
+  - role: worker
+    privateAddress: 192.168.20.3
+    ssh:
+      address: kodaka.tail1e178.ts.net
+      user: ubuntu
+      port: 22
+  k0s:
+    version: 1.25.2+k0s.0
+    dynamicConfig: false
+    config:
+      apiVersion: k0s.k0sproject.io/v1beta1
+      kind: ClusterConfig
+      metadata:
+        name: homelab-cluster
+      spec:
+        api:
+          address: 192.168.20.2
+          port: 6443
+          k0sApiPort: 9443
+          sans:
+          - k8s.tosuke.me
+        storage:
+          type: kine
+          kine:
+            dataSource: "sqlite:///var/lib/k0s/state.db?mode=rwc&_journal=WAL&cache=shared"
+        controllerManager:
+          extraArgs:
+            node-cidr-mask-size-ipv4: "24"
+            node-cidr-mask-size-ipv6: "96"
+        network:
+          provider: custom
+          podCIDR: "10.244.0.0/16"
+          serviceCIDR: "10.96.0.0/16"
+          dualStack:
+            enabled: true
+            IPv6podCIDR:     "240d:1a:d4e:c521:706f:6400::/88"  # encode("pod") = [0x70, 0x6f, 0x64]
+            IPv6serviceCIDR: "240d:1a:d4e:c521:7376:6300::/112" # encode("svc") = [0x73, 0x76, 0x63]
+          kubeProxy:
+            disabled: true
