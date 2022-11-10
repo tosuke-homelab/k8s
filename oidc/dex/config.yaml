@@ -16,7 +16,10 @@ connectors:
     redirectURI: https://id.tosuke.me/callback
 
     orgs:
+    - name: tosuke-homelab
     - name: linkage-community
+      teams:
+      - developers
 
 staticClients:
 - id: hubble-ui

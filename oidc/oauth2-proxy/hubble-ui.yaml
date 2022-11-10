@@ -82,7 +82,7 @@ spec:
         - --oidc-issuer-url=https://id.tosuke.me
         - --redirect-url=https://hubble.k8s.tosuke.me/oauth2/callback
         - --email-domain=*
-        - --allowed-group=linkage-community:developers
+        - --allowed-group=tosuke-homelab:viewer,linkage-community:developers
         env:
         - name: OAUTH2_PROXY_COOKIE_SECRET
           valueFrom:
