@@ -22,6 +22,14 @@ connectors:
       - developers
 
 staticClients:
+- id: kubernetes
+  secret: "{{ .Env.KUBERNETES_CLIENT_SECRET }}"
+  public: true
+  name: Kubernetes
+  redirectURIs:
+  - http://localhost:8000
+  - http://localhost:10000
+
 - id: hubble-ui
   secret: "{{ .Env.HUBBLE_UI_CLIENT_SECRET }}"
   name: "Hubble UI"

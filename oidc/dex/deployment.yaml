@@ -67,6 +67,11 @@ spec:
             secretKeyRef:
               name: dex-client-secret-hubble-ui
               key: client-secret
+        - name: KUBERNETES_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: dex-client-secret-kubernetes
+              key: client-secret
 
         resources:
           limits:

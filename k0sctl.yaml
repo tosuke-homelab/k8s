@@ -31,6 +31,14 @@ spec:
           k0sApiPort: 9443
           sans:
           - k8s.tosuke.me
+          extraArgs:
+            oidc-issuer-url: https://id.tosuke.me
+            oidc-client-id: kubernetes
+            oidc-username-claim: name
+            oidc-username-prefix: "oidc:"
+            oidc-groups-claim: groups
+            oidc-groups-prefix: "oidc:"
+
         storage:
           type: kine
           kine:
