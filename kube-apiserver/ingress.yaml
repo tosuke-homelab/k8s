@@ -12,6 +12,26 @@ spec:
       port: 443
   tls:
     passthrough: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: TraefikService
+metadata:
+  name: external-kube-apiserver
+spec:
+  weighted:
+    services:
+    - kind: Service
+      name: kubernetes
+      port: 443
+      scheme: https
+      serversTransport: external-kube-apiserver
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: ServersTransport
+metadata:
+  name: external-kube-apiserver
+spec:
+  insecureSkipVerify: true
 --- 
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint

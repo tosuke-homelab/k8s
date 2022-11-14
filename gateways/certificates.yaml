@@ -1,6 +1,23 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
+  name: wildcard-tosuke-me
+spec:
+  secretName: cert-wildcard-tosuke-me
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt
+  commonName: "*.tosuke.me"
+  dnsNames:
+  - "tosuke.me"
+  - "*.tosuke.me"
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
   name: wildcard-k8s-tosuke-me
 spec:
   secretName: cert-wildcard-k8s-tosuke-me

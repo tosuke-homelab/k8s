@@ -12,6 +12,7 @@ resources:
 - edgerouter-dashboard-gateway.yaml
 - dex-gateway.yaml
 - hubble-ui-gateway.yaml
+- kube-apiserver.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: external-kube-apiserver
+spec:
+  entryPoints: [websecure]
+  routes:
+  - match: Host(`k8s.tosuke.me`)
+    kind: Rule
+    services:
+    - kind: TraefikService
+      namespace: default
+      name: external-kube-apiserver
+  tls:
+    secretName: cert-wildcard-tosuke-me
