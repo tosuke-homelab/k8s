@@ -31,6 +31,7 @@ spec:
           k0sApiPort: 9443
           sans:
           - k8s.tosuke.me
+          - hayama.tail1e178.ts.net
           extraArgs:
             oidc-issuer-url: https://id.tosuke.me
             oidc-client-id: kubernetes
