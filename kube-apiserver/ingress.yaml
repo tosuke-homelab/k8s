@@ -1,19 +1,4 @@
 apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRouteTCP
-metadata:
-  name: kube-apiserver
-spec:
-  entryPoints:
-  - kubernetes
-  routes:
-  - match: HostSNI(`k8s.tosuke.me`)
-    services:
-    - name: kubernetes
-      port: 443
-  tls:
-    passthrough: true
----
-apiVersion: traefik.containo.us/v1alpha1
 kind: TraefikService
 metadata:
   name: external-kube-apiserver
@@ -32,13 +17,3 @@ metadata:
   name: external-kube-apiserver
 spec:
   insecureSkipVerify: true
---- 
-apiVersion: externaldns.k8s.io/v1alpha1
-kind: DNSEndpoint
-metadata:
-  name: kube-apiserver
-spec:
-  endpoints:
-  - dnsName: k8s.tosuke.me
-    recordType: CNAME
-    targets: [traefik.dns.tosuke.me]

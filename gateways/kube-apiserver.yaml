@@ -13,3 +13,15 @@ spec:
       name: external-kube-apiserver
   tls:
     secretName: cert-wildcard-tosuke-me
+    domains:
+    - main: k8s.tosuke.me
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: kube-apiserver
+spec:
+  endpoints:
+  - dnsName: k8s.tosuke.me
+    recordType: CNAME
+    targets: [traefik.dns.tosuke.me]

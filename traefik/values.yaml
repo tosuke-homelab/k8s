@@ -43,13 +43,6 @@ ports:
       certResolver: ""
       domains: []
     http3: true
-  kubernetes:
-    port: 6443
-    expose: true
-    exposedPort: 6443
-    protocol: TCP
-    tls:
-      enabled: true
   metrics:
     port: 9100
     expose: false

@@ -13,6 +13,8 @@ spec:
       name: dex
   tls:
     secretName: cloudflare-origin-cert-wildcard-tosuke-me
+    domains:
+    - main: id.tosuke.me
     options:
       name: cloudflare-origin
 ---
