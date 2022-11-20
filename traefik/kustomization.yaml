@@ -5,6 +5,7 @@ namespace: traefik
 
 resources:
 - namespace.yaml
+- rbac.yaml
 
 helmCharts:
 - name: traefik
