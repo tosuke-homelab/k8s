@@ -5,6 +5,13 @@ metadata:
 spec:
   entryPoints: [websecure]
   routes:
+  - match: "Host(`k8s.tosuke.me`) && Method(`GET`) && Path(`/.well-known/openid-configuration`, `/openid/v1/jwks`)"
+    kind: Rule
+    services:
+    - kind: TraefikService
+      namespace: default
+      name: external-kube-apiserver
+    
   - match: Host(`k8s.tosuke.me`)
     kind: Rule
     services:
