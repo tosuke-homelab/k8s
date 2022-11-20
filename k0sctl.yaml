@@ -33,6 +33,9 @@ spec:
           - k8s.tosuke.me
           - hayama.tail1e178.ts.net
           extraArgs:
+            anonymous-auth: "true"
+            service-account-issuer: https://k8s.tosuke.me
+            service-account-jwks-uri: https://k8s.tosuke.me/openid/v1/jwks
             oidc-issuer-url: https://id.tosuke.me
             oidc-client-id: kubernetes
             oidc-username-claim: name
