@@ -7,10 +7,19 @@ spec:
   routes:
   - match: Host(`dash.k8s.tosuke.me`)
     kind: Rule
+    middlewares:
+    - name: kube-dashboard-oauth
+      namespace: oidc
     services:
     - kind: TraefikService
       namespace: kube-system
       name: kubernetes-dashboard
+  - match: Host(`dash.k8s.tosuke.me`) && PathPrefix(`/oauth2/`)
+    kind: Rule
+    services:
+    - kind: TraefikService
+      namespace: oidc
+      name: kube-dashboard-oauth2-proxy
   tls:
     secretName: cert-wildcard-k8s-tosuke-me
 ---

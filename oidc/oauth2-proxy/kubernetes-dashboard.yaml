@@ -1,0 +1,131 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: kube-dashboard-oauth
+spec:
+  chain:
+    middlewares:
+    - name: kube-dashboard-oauth-errors
+    - name: kube-dashboard-oauth-auth
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: kube-dashboard-oauth-auth
+spec:
+  forwardAuth:
+    address: http://kube-dashboard-oauth2-proxy.oidc/oauth2/auth
+    trustForwardHeader: true
+    authResponseHeaders:
+    - Authorization
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: kube-dashboard-oauth-errors
+spec:
+  errors:
+    status:
+    - "401-403"
+    service:
+      kind: Service
+      name: kube-dashboard-oauth2-proxy
+      port: 80
+    query: "/oauth2/sign_in"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: TraefikService
+metadata:
+  name: kube-dashboard-oauth2-proxy
+spec:
+  weighted:
+    services:
+    - kind: Service
+      name: kube-dashboard-oauth2-proxy
+      port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-dashboard-oauth2-proxy
+spec:
+  selector:
+    app: kube-dashboard-oauth2-proxy
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-dashboard-oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-dashboard-oauth2-proxy
+  template:
+    metadata:
+      labels:
+        app: kube-dashboard-oauth2-proxy
+      annotations:
+        io.cilium.proxy-visibility: "<Ingress/4180/TCP/HTTP>"
+    spec:
+      containers:
+      - name: kube-dashboard-oauth2-proxy
+        image: quay.io/oauth2-proxy/oauth2-proxy
+        imagePullPolicy: IfNotPresent
+        args:
+        - --http-address=0.0.0.0:4180
+        - --provider=oidc
+        - --provider-display-name=dex
+        - --oidc-issuer-url=https://id.tosuke.me
+        - --redirect-url=https://dash.k8s.tosuke.me/oauth2/callback
+        - --email-domain=*
+        - --set-authorization-header=true
+        env:
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth2-proxy-cookie-secret-hubble-ui
+              key: cookie-secret
+        - name: OAUTH2_PROXY_CLIENT_ID
+          value: kubernetes
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: dex-client-secret-kubernetes
+              key: client-secret
+        - name: OAUTH2_PROXY_SCOPE
+          value: "openid email profile groups"
+        ports:
+        - containerPort: 4180
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 0
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 0
+          timeoutSeconds: 1
+          successThreshold: 1
+          periodSeconds: 10
+
+        

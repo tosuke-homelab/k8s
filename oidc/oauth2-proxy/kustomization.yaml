@@ -6,6 +6,7 @@ commonLabels:
 
 resources:
 - hubble-ui.yaml
+- kubernetes-dashboard.yaml
 
 images:
 - name: quay.io/oauth2-proxy/oauth2-proxy
