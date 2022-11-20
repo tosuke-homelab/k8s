@@ -12,9 +12,11 @@ spec:
       namespace: default
       name: external-kube-apiserver
   tls:
-    secretName: cert-wildcard-tosuke-me
+    secretName: cloudflare-origin-cert-wildcard-tosuke-me
     domains:
     - main: k8s.tosuke.me
+    options:
+      name: cloudflare-origin
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
@@ -25,3 +27,6 @@ spec:
   - dnsName: k8s.tosuke.me
     recordType: CNAME
     targets: [traefik.dns.tosuke.me]
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "true"
