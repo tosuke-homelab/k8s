@@ -13,6 +13,7 @@ resources:
 - dex-gateway.yaml
 - hubble-ui-gateway.yaml
 - kube-apiserver.yaml
+- kubernetes-dashboard.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

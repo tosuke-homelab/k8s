@@ -1,0 +1,25 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kubernetes-dashboard
+spec:
+  entryPoints: [websecure]
+  routes:
+  - match: Host(`dash.k8s.tosuke.me`)
+    kind: Rule
+    services:
+    - kind: TraefikService
+      namespace: kube-system
+      name: kubernetes-dashboard
+  tls:
+    secretName: cert-wildcard-k8s-tosuke-me
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: kubernetes-dashboard
+spec:
+  endpoints:
+  - dnsName: dash.k8s.tosuke.me
+    recordType: CNAME
+    targets: [traefik.dns.tosuke.me]
