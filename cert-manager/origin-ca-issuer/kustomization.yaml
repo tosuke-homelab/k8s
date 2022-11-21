@@ -11,3 +11,4 @@ resources:
 - role-binding.yaml
 - https://raw.githubusercontent.com/cloudflare/origin-ca-issuer/v0.6.1/deploy/manifests/serviceaccount.yaml
 - https://raw.githubusercontent.com/cloudflare/origin-ca-issuer/v0.6.1/deploy/manifests/deployment.yaml
+- users.yaml

@@ -9,7 +9,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: originissuer-control
-    namespace: cert-manager
+    namespace: default
 ---
 # bind the cert-manager internal approver to approve
 # cert-manager.k8s.cloudflare.com CertificateRequests
@@ -24,4 +24,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: homelab-cert-manager
-  namespace: cert-manager
+  namespace: default
