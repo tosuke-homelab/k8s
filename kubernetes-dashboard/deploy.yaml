@@ -88,6 +88,3 @@ spec:
       serviceAccountName: kubernetes-dashboard
       nodeSelector:
         "kubernetes.io/os": linux
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
