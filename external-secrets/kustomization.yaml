@@ -6,6 +6,7 @@ namespace: external-secrets
 resources:
 - namespace.yaml
 - gcpsm-cluster-secret-store.yaml
+- webhook-ca.yaml
 
 helmCharts:
 - name: external-secrets
@@ -16,9 +17,29 @@ helmCharts:
   includeCRDs: true
   valuesInline:
     certController:
+      create: false
+    webhook:
       tolerations:
       - operator: Exists
         key: "node-role.kubernetes.io/master"
     tolerations:
     - operator: Exists
       key: "node-role.kubernetes.io/master"
+
+patches:
+- target:
+    group: apiextensions.k8s.io
+    version: v1
+    kind: CustomResourceDefinition
+  patch: |-
+    - op: add
+      path: /metadata/annotations/cert-manager.io~1inject-ca-from
+      value: external-secrets/external-secrets-webhook-ca
+- target:
+    group: admissionregistration.k8s.io
+    version: v1
+    kind: ValidatingWebhookConfiguration
+  patch: |-
+    - op: add
+      path: /metadata/annotations/cert-manager.io~1inject-ca-from
+      value: external-secrets/external-secrets-webhook-ca

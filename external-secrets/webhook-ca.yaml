@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: external-secrets-webhook-ca
+spec:
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigned-issuer
+  secretName: homelab-external-secrets-webhook # hard-coded for deploy/homelab-external-secrets-webhook
+  commonName: external-secrets-webhook-ca
+  subject:
+    organizations: ["external-secrets"]
+  dnsNames:
+  - homelab-external-secrets-webhook.external-secrets.svc
+  - homelab-external-secrets-webhook.external-secrets.svc.cluster.local
+  duration: 4560h # 190 days
+  renewBefore: 2400h # 100 days
