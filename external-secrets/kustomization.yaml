@@ -5,7 +5,6 @@ namespace: external-secrets
 
 resources:
 - namespace.yaml
-- gcpsm-cluster-secret-store.yaml
 - webhook-ca.yaml
 
 helmCharts:
