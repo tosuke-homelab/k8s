@@ -1,3 +1,6 @@
+debug:
+  enabled: false
+
 # eBPF native routing
 tunnel: disabled
 ipv4NativeRoutingCIDR: "10.0.0.0/8"
@@ -5,7 +8,6 @@ ipv6NativeRoutingCIDR: "240d:1a:d4e:c521::/64"
 ipv6:
   enabled: true
 kubeProxyReplacement: strict
-autoDirectNodeRoutes: true
 devices:
 - eth0
 
@@ -17,6 +19,10 @@ enableIPv6Masquerade: false
 # Kubernetes Host based IPAM
 ipam:
   mode: kubernetes
+
+# BGP
+bgpControlPlane:
+  enabled: true
 
 # API Server
 k8sServiceHost: "192.168.20.2"
@@ -30,7 +36,7 @@ loadBalancer:
 # cilium-agent
 image:
   repository: "quay.io/cilium/cilium"
-  tag: "v1.12.3"
+  tag: "v1.12.4"
 tolerations:
 - operator: Exists
 prometheus:

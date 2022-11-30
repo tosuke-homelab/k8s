@@ -1,0 +1,14 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeeringPolicy
+metadata:
+  name: default
+spec:
+  nodeSelector: {}
+  virtualRouters:
+  - localASN: 100000
+    exportPodCIDR: true
+    neighbors:
+    - peerAddress: 127.0.0.1/32
+      peerASN: 100004
+    - peerAddress: ::1/128
+      peerASN: 100006

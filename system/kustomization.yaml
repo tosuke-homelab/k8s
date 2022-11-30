@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: kube-system
 
 resources:
+- bgp-default-policy.yaml
 - selfsigned-issuer.yaml
 - gcpsm-cluster-secret-store.yaml
 - edgerouter-dashboard.yaml

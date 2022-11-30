@@ -5,12 +5,6 @@ namespace: purelb
 
 resources:
 - namespace.yaml
-- bird.yaml
-
-configMapGenerator:
-- name: bird-cm
-  files:
-  - bird.conf
 
 helmCharts:
 - name: purelb
